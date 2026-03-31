@@ -84,27 +84,27 @@
         tags:
           Name: vprofile_privsub3
       register: privsub3_out
-    
-    - name: Create Internet Gateway
-  ec2_vpc_igw:
-    region: "{{ region }}"
-    state: "{{ state }}"
-    vpc_id: "{{ vpcout.vpc.id }}"
-    tags:
-      Name: vprofile_IGW
-  register: igw_out
 
-- name: setup public subnet route table
-  ec2_vpc_route_table:
-    region: "{{ region }}"
-    vpc_id: "{{ vpcout.vpc.id }}"
-    tags:
-      Name: vprofile_PubRT
-    subnets:
-      - "{{ pubsub1_out.subnet.id }}"
-      - "{{ pubsub2_out.subnet.id }}"
-      - "{{ pubsub3_out.subnet.id }}"
-    routes:
-      - dest: 0.0.0.0/0
-        gateway_id: "{{ igw_out.gateway.id }}"
-  register: pubRT_out
+    - name: Create Internet Gateway
+      ec2_vpc_igw:
+        region: "{{ region }}"
+        state: "{{ state }}"
+        vpc_id: "{{ vpcout.vpc.id }}"
+        tags:
+          Name: vprofile_IGW
+      register: igw_out
+
+    - name: setup public subnet route table
+      ec2_vpc_route_table:
+        region: "{{ region }}"
+        vpc_id: "{{ vpcout.vpc.id }}"
+        tags:
+          Name: vprofile_PubRT
+        subnets:
+          - "{{ pubsub1_out.subnet.id }}"
+          - "{{ pubsub2_out.subnet.id }}"
+          - "{{ pubsub3_out.subnet.id }}"
+        routes:
+          - dest: 0.0.0.0/0
+            gateway_id: "{{ igw_out.gateway.id }}"
+      register: pubRT_out
