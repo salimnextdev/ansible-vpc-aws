@@ -46,6 +46,7 @@
         instance_type: t2.micro
         image_id: "{{ bastion_ami }}"
         wait: yes
+        vpc_subnet_id: "{{ pubsub1id }}"
         tags:
           Name: bastion_Host
           Project: Salim
