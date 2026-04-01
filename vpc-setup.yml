@@ -124,10 +124,10 @@
         tags:
           Name: "vprofile_PrivRT"
         subnets:
-        - "{{{{ privsub1_out.subnet.id }}}}"
-        - "{{{{ privsub2_out.subnet.id }}}}"
-        - "{{{{ privsub3_out.subnet.id }}}}"
-        routes: 
+          - "{{ privsub1_out.subnet.id }}"
+          - "{{ privsub2_out.subnet.id }}"
+          - "{{ privsub3_out.subnet.id }}"
+        routes:
           - dest: 0.0.0.0/0
-            gateway_id: "{{NATGW_out.nat_gateway_id}}"
+            gateway_id: "{{ NATGW_out.nat_gateway_id }}"
       register: PrivRT_out
