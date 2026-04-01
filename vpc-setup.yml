@@ -135,7 +135,7 @@
       register: PrivRT_out
 
     - debug:
-        var: "{{ item }}"
+        msg: "{{ item }}"
       loop:
         - vpcout.vpc.id
         - pubsub1_out.subnet.id
