@@ -1,54 +1,53 @@
 ---
 - name: Setup Bastion Host Instance
   hosts: localhost
-  connections: local
+  connection: local
   gather_facts: no
   tasks:
     - name: Import VPC Setup variables
-      include: vars/output_vars
+      include_vars: vars/output_vars
 
-- name: Create Vprofile EC2 key
-  ec2_key:
-    name: vprofile-key
-    region: "{{region}}"
-  register: key_out
+    - name: Create Vprofile EC2 key
+      ec2_key:
+        name: vprofile-key
+        region: "{{ region }}"
+      register: key_out
 
-- name: Save Bastion Host key into file
-  copy:
-    content: "{{key_out.key.private_key}}"
-    dest: "./bastionkey.pem"
-    mode: 0600
-  when: key_out.changed
+    - name: Save Bastion Host key into file
+      copy:
+        content: "{{ key_out.key.private_key }}"
+        dest: "./bastionkey.pem"
+        mode: 0600
+      when: key_out.changed
 
-- name: Create SG for Bastion Host
-  ec2_group:
-    name: bastion-sg
-    region: "{{region}}"
-    description: "allow access to bastion host on port 22 from anywhere"
-    vpc_id: "{{vpcid}}"
-    rules:
-      proto: tcp
-      from_port: 22
-      to_port: 22
-      cidr_ip: "{{MYIP}}"
-    register: BastionSG_out
+    - name: Create SG for Bastion Host
+      ec2_group:
+        name: bastion-sg
+        region: "{{ region }}"
+        description: "allow access to bastion host on port 22 from anywhere"
+        vpc_id: "{{ vpcid }}"
+        rules:
+          - proto: tcp
+            from_port: 22
+            to_port: 22
+            cidr_ip: "{{ MY_IP }}"
+      register: BastionSG_out
 
-- name: Creating Bastion Host
-  ec2:
-    key_name: vprofile-key
-    region: "{{region}}"
-    instance_type: t2.micro
-    image: {{bastion_ami}}
-    wait: yes
-    wait_timeout: 300
-    instance_tags:
-      Name: "bastion_Host"
-      Project: Salim
-      Owner: DevOps Team
-    exact_count: 1
-    count_tags:
-      Project: Salim
-      Owner: DevOps Team
-      group_id: "{{ BastionSG_out.group_id}}"
-  register: BastionHost_out
-
+    - name: Creating Bastion Host
+      ec2:
+        key_name: vprofile-key
+        region: "{{ region }}"
+        instance_type: t2.micro
+        image: "{{ bastion_ami }}"
+        wait: yes
+        wait_timeout: 300
+        instance_tags:
+          Name: bastion_Host
+          Project: Salim
+          Owner: DevOps Team
+        exact_count: 1
+        count_tags:
+          Project: Salim
+          Owner: DevOps Team
+        group_id: "{{ BastionSG_out.group_id }}"
+      register: BastionHost_out
