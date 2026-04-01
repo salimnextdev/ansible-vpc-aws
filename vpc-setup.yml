@@ -165,6 +165,6 @@
 
     - name: Create variables file for vpc module output
       copy:
-        content: "{{ vpcid }}\n{{ pubsub1id }}\n{{ pubsub2id }}\n{{ pubsub3id }}\n{{ privsub1id }}\n{{ privsub2id }}\n{{ privsub3id }}\n{{ igwid }}\n{{ pubRTid }}\n{{ privRTid }}\n{{ NATGWid }}\n"
+        content: "vpcid: {{ vpcid }}\npubsub1id: {{ pubsub1id }}\npubsub2id: {{ pubsub2id }}\npubsub3id: {{ pubsub3id }}\nprivsub1id: {{ privsub1id }}\nprivsub2id: {{ privsub2id }}\nprivsub3id: {{ privsub3id }}\nigwid: {{ igwid }}\npubRTid: {{ pubRTid }}\nprivRTid: {{ privRTid }}\nNATGWid: {{ NATGWid }}\n"
         dest: vars/output_vars
       
