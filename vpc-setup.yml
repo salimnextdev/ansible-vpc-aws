@@ -111,11 +111,13 @@
 
     - name: Create NAT Gateway and allocate new EIP if NAT Gateway does not already exist
       ec2_vpc_nat_gateway:
-        state: "{{state}}"
-        subnet_id: "{{pubsub1_out.subnet.id}}"
+        state: "{{ state }}"
+        subnet_id: "{{ pubsub1_out.subnet.id }}"
         wait: yes
-        region: "{{region}}"
+        region: "{{ region }}"
         if_exist_do_not_create: true
+        tags:
+          Name: vprofile_NATGW
       register: NATGW_out
     - name: Create private subnet route table
       ec2_vpc_route_table:
